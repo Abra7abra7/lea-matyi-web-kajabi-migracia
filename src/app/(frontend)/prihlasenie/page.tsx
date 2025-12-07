@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,6 +11,9 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectUrl = searchParams.get('redirect') || '/dashboard'
+  
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -36,8 +39,8 @@ export default function LoginPage() {
         throw new Error(data.message || 'Nesprávny email alebo heslo')
       }
 
-      // Redirect to dashboard
-      router.push('/dashboard')
+      // Redirect to original page or dashboard
+      router.push(redirectUrl)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nastala chyba pri prihlásení')
@@ -145,7 +148,7 @@ export default function LoginPage() {
           <p className="mt-6 text-center text-sm text-gray-600">
             Nemáte účet?{' '}
             <Link 
-              href="/registracia" 
+              href={redirectUrl !== '/dashboard' ? `/registracia?redirect=${encodeURIComponent(redirectUrl)}` : '/registracia'} 
               className="font-semibold text-primary-600 hover:text-primary-500"
             >
               Zaregistrujte sa

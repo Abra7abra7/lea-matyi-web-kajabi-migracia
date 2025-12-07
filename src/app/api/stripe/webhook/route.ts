@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { verifyWebhookSignature } from '@/lib/stripe'
 import { getPayloadClient } from '@/lib/payload'
-import { sendPurchaseConfirmationEmail } from '@/lib/email'
+import { sendPurchaseConfirmationEmail, sendWelcomeEmail } from '@/lib/email'
 import type Stripe from 'stripe'
+import crypto from 'crypto'
 
 export async function POST(request: Request) {
   const body = await request.text()
@@ -59,50 +60,115 @@ export async function POST(request: Request) {
 }
 
 /**
+ * Generuj náhodné heslo
+ */
+function generatePassword(): string {
+  return crypto.randomBytes(12).toString('base64').slice(0, 16)
+}
+
+/**
  * Spracuje úspešný checkout
  */
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  const { courseId, userId } = session.metadata || {}
+  const { courseId, courseSlug, userId } = session.metadata || {}
+  const customerEmail = session.customer_email || session.customer_details?.email
 
-  if (!courseId || !userId) {
-    console.error('Missing metadata in checkout session')
+  if (!courseId) {
+    console.error('Missing courseId in checkout session metadata')
+    return
+  }
+
+  if (!customerEmail) {
+    console.error('Missing customer email in checkout session')
     return
   }
 
   const payload = await getPayloadClient()
+  let user: any = null
+  let isNewUser = false
+  let generatedPassword: string | null = null
 
-  // Získaj používateľa
-  const user = await payload.findByID({
-    collection: 'users',
-    id: userId,
+  // Ak máme userId, použijeme ho
+  if (userId) {
+    try {
+      user = await payload.findByID({
+        collection: 'users',
+        id: userId,
+        depth: 0,
+      })
+    } catch (e) {
+      console.log('User not found by ID, will search by email')
+    }
+  }
+
+  // Ak nemáme používateľa, hľadáme podľa emailu
+  if (!user) {
+    const existingUsers = await payload.find({
+      collection: 'users',
+      where: {
+        email: { equals: customerEmail },
+      },
+      limit: 1,
+    })
+
+    if (existingUsers.docs.length > 0) {
+      user = existingUsers.docs[0]
+    }
+  }
+
+  // Ak stále nemáme používateľa, vytvoríme nového
+  if (!user) {
+    isNewUser = true
+    generatedPassword = generatePassword()
+    
+    try {
+      user = await payload.create({
+        collection: 'users',
+        data: {
+          email: customerEmail,
+          password: generatedPassword,
+          firstName: session.customer_details?.name?.split(' ')[0] || '',
+          lastName: session.customer_details?.name?.split(' ').slice(1).join(' ') || '',
+          role: 'customer',
+          stripeCustomerId: session.customer as string,
+          purchasedCourses: [courseId],
+        },
+      })
+      console.log(`Created new user: ${customerEmail}`)
+    } catch (createError) {
+      console.error('Failed to create user:', createError)
+      return
+    }
+  } else {
+    // Existujúci používateľ - pridaj kurz
+    const purchasedCourses = (user.purchasedCourses as any[]) || []
+    const courseIds = purchasedCourses.map((c: any) => typeof c === 'object' ? c.id : c)
+    
+    if (!courseIds.includes(courseId)) {
+      await payload.update({
+        collection: 'users',
+        id: user.id,
+        data: {
+          purchasedCourses: [...courseIds, courseId],
+          stripeCustomerId: session.customer as string,
+        },
+      })
+    }
+  }
+
+  // Získaj kurz
+  const course = await payload.findByID({
+    collection: 'courses',
+    id: courseId,
     depth: 0,
   })
 
-  if (!user) {
-    console.error('User not found:', userId)
-    return
-  }
-
-  // Pridaj kurz do zakúpených
-  const purchasedCourses = (user.purchasedCourses as string[]) || []
-  
-  if (!purchasedCourses.includes(courseId)) {
-    await payload.update({
-      collection: 'users',
-      id: userId,
-      data: {
-        purchasedCourses: [...purchasedCourses, courseId],
-        stripeCustomerId: session.customer as string,
-      },
-    })
-  }
-
   // Vytvor objednávku
-  await payload.create({
+  const order = await payload.create({
     collection: 'orders',
     data: {
-      customer: userId,
-      customerEmail: session.customer_email || user.email,
+      customer: user.id,
+      customerEmail: customerEmail,
       course: courseId,
       total: (session.amount_total || 0) / 100,
       currency: (session.currency || 'EUR').toUpperCase(),
@@ -112,28 +178,32 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     },
   })
 
-  console.log(`Order created for user ${userId}, course ${courseId}`)
+  console.log(`Order ${order.id} created for ${customerEmail}, course ${courseId}`)
 
-  // Odoslať email s potvrdením
+  // Odoslať emaily
   try {
-    // Získaj kurz pre názov
-    const course = await payload.findByID({
-      collection: 'courses',
-      id: courseId,
-      depth: 0,
-    })
-    
+    // Ak je nový používateľ, pošleme welcome email s heslom
+    if (isNewUser && generatedPassword) {
+      await sendWelcomeEmail({
+        to: customerEmail,
+        customerName: user.firstName || 'Zákazník',
+        temporaryPassword: generatedPassword,
+        loginUrl: `${process.env.NEXT_PUBLIC_APP_URL}/prihlasenie`,
+      })
+      console.log(`Welcome email sent to new user ${customerEmail}`)
+    }
+
+    // Potvrdenie nákupu
     await sendPurchaseConfirmationEmail({
-      to: session.customer_email || user.email,
-      customerName: (user.firstName as string) || 'Zákazník',
-      courseName: course.title,
-      price: `${((session.amount_total || 0) / 100).toFixed(2)} ${(session.currency || 'EUR').toUpperCase()}`,
-      courseUrl: `${process.env.NEXT_PUBLIC_APP_URL}/kurzy/${course.slug}`,
+      to: customerEmail,
+      customerName: user.firstName || 'Zákazník',
+      courseId: courseId,
+      userId: user.id,
+      orderNumber: String(order.id),
+      amount: (session.amount_total || 0) / 100,
     })
-    console.log(`Confirmation email sent to ${session.customer_email || user.email}`)
+    console.log(`Purchase confirmation email sent to ${customerEmail}`)
   } catch (emailError) {
-    console.error('Failed to send confirmation email:', emailError)
-    // Nechceme aby zlyhanie emailu zastavilo celý webhook
+    console.error('Failed to send email:', emailError)
   }
 }
-

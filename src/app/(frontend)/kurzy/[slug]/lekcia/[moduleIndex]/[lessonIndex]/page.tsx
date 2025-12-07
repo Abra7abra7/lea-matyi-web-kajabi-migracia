@@ -10,6 +10,7 @@ import {
   List
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { VideoPlayer } from '@/components/VideoPlayer'
 
 interface Props {
   params: Promise<{ 
@@ -243,21 +244,6 @@ export default async function LessonPage({ params }: Props) {
         <List className="w-6 h-6" />
       </button>
     </main>
-  )
-}
-
-function VideoPlayer({ videoId }: { videoId: string }) {
-  // Placeholder - neskôr nahradíme Cloudflare Stream
-  return (
-    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-      <div className="text-center">
-        <PlayCircle className="w-20 h-20 text-primary-500 mx-auto mb-4" />
-        <p className="text-gray-400 text-sm">Video ID: {videoId}</p>
-        <p className="text-gray-500 text-xs mt-2">
-          Cloudflare Stream bude integrovaný v Fáze 6
-        </p>
-      </div>
-    </div>
   )
 }
 

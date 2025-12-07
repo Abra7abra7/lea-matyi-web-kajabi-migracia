@@ -1,12 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PlayCircle, Pause, Volume2, VolumeX, Maximize, Settings, Loader2 } from 'lucide-react'
+import { PlayCircle, Loader2 } from 'lucide-react'
 
 interface VideoPlayerProps {
   videoId: string
-  signedToken?: string
-  poster?: string
   title?: string
   onProgress?: (progress: number) => void
   onComplete?: () => void
@@ -15,8 +13,6 @@ interface VideoPlayerProps {
 
 export function VideoPlayer({
   videoId,
-  signedToken,
-  poster,
   title,
   onProgress,
   onComplete,
@@ -26,35 +22,27 @@ export function VideoPlayer({
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Cloudflare Stream iframe URL
-  const accountId = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_ID
-  
-  // Ak máme signed token, použijeme ho
-  const videoSrc = signedToken
-    ? `https://customer-${accountId}.cloudflarestream.com/${signedToken}/iframe`
-    : `https://customer-${accountId}.cloudflarestream.com/${videoId}/iframe`
-
-  // Parameters pre iframe
+  // Cloudflare Stream iframe URL (univerzálna)
+  // https://iframe.videodelivery.net/{VIDEO_ID}
   const params = new URLSearchParams({
     autoplay: autoplay ? 'true' : 'false',
     preload: 'auto',
     loop: 'false',
     muted: 'false',
     controls: 'true',
-    defaultTextTrack: 'sk',
   })
 
-  const iframeSrc = `${videoSrc}?${params.toString()}`
+  const iframeSrc = `https://iframe.videodelivery.net/${videoId}?${params.toString()}`
 
   useEffect(() => {
     // Listen for messages from iframe (progress, completion, etc.)
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin.includes('cloudflarestream.com')) {
+      if (event.origin.includes('videodelivery.net') || event.origin.includes('cloudflarestream.com')) {
         const { type, data } = event.data || {}
         
         switch (type) {
           case 'progress':
-            onProgress?.(data.percent)
+            onProgress?.(data?.percent)
             break
           case 'ended':
             onComplete?.()
@@ -69,20 +57,6 @@ export function VideoPlayer({
     window.addEventListener('message', handleMessage)
     return () => window.removeEventListener('message', handleMessage)
   }, [onProgress, onComplete])
-
-  // Fallback ak nie je nakonfigurovaný Cloudflare
-  if (!accountId) {
-    return (
-      <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
-        <div className="text-center text-gray-400">
-          <PlayCircle className="w-16 h-16 mx-auto mb-4 opacity-50" />
-          <p className="text-sm">Video prehrávač</p>
-          <p className="text-xs mt-1 opacity-70">Cloudflare Stream nie je nakonfigurovaný</p>
-          <p className="text-xs mt-1 opacity-50">Video ID: {videoId}</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">

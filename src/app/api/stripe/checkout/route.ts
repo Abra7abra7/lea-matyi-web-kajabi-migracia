@@ -1,22 +1,10 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { getCurrentUser } from '@/lib/auth'
 import { getCourseBySlug, getPayloadClient } from '@/lib/payload'
-import { createCheckoutSession } from '@/lib/stripe'
+import { stripe } from '@/lib/stripe'
 
 export async function POST(request: Request) {
   try {
-    // Získaj prihláseného používateľa
-    const user = await getCurrentUser()
-    
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Pre nákup sa musíte prihlásiť' },
-        { status: 401 }
-      )
-    }
-
-    // Získaj courseSlug z body
     const body = await request.json()
     const { courseSlug } = body
 
@@ -44,25 +32,51 @@ export async function POST(request: Request) {
       )
     }
 
-    // Skontroluj či používateľ už kurz nevlastní
-    const purchasedCourses = (user.purchasedCourses as { id: string }[]) || []
-    if (purchasedCourses.some(c => c.id === course.id)) {
-      return NextResponse.json(
-        { error: 'Tento kurz už vlastníte' },
-        { status: 400 }
-      )
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    
+    // Skontroluj či je používateľ prihlásený
+    const user = await getCurrentUser()
+    
+    // Ak je prihlásený, skontroluj či už kurz nevlastní
+    if (user) {
+      const purchasedCourses = (user.purchasedCourses as { id: string }[]) || []
+      if (purchasedCourses.some(c => String(c.id) === String(course.id))) {
+        return NextResponse.json(
+          { error: 'Tento kurz už vlastníte' },
+          { status: 400 }
+        )
+      }
     }
 
     // Vytvor Checkout Session
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    
-    const session = await createCheckoutSession({
-      priceId: course.stripePriceId,
-      courseId: String(course.id),
-      userId: String(user.id),
-      userEmail: user.email,
-      successUrl: `${baseUrl}/kurzy/${courseSlug}?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${baseUrl}/kurzy/${courseSlug}?canceled=true`,
+    // Guest checkout - Stripe zbiera email
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: course.stripePriceId,
+          quantity: 1,
+        },
+      ],
+      // Pre prihlásených nastavíme email, pre hostí necháme Stripe zbierať
+      ...(user ? {
+        customer_email: user.email,
+      } : {
+        // Stripe automaticky zobrazí email field
+      }),
+      metadata: {
+        courseId: String(course.id),
+        courseSlug: courseSlug,
+        // Ak je používateľ prihlásený, pridáme jeho ID
+        ...(user ? { userId: String(user.id) } : {}),
+      },
+      success_url: `${baseUrl}/kurzy/${courseSlug}?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/kurzy/${courseSlug}?canceled=true`,
+      // Povoliť promo kódy
+      allow_promotion_codes: true,
+      // Automaticky zbierať fakturačnú adresu
+      billing_address_collection: 'required',
     })
 
     return NextResponse.json({ url: session.url })
@@ -74,4 +88,3 @@ export async function POST(request: Request) {
     )
   }
 }
-

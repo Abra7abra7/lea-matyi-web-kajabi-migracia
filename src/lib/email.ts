@@ -1,5 +1,7 @@
 import { Resend } from 'resend'
 import { siteConfig } from '@/config'
+import { getPayloadClient } from './payload'
+import { formatPrice } from './utils'
 
 // Resend instance
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -47,21 +49,29 @@ export async function sendEmail(options: EmailOptions) {
 export async function sendPurchaseConfirmationEmail({
   to,
   customerName,
-  courseName,
-  courseUrl,
+  courseId,
+  userId,
   orderNumber,
-  price,
+  amount,
 }: {
   to: string
   customerName: string
-  courseName: string
-  courseUrl: string
-  orderNumber?: string
-  price: string
+  courseId: string
+  userId: string
+  orderNumber: string
+  amount: number
 }) {
-  const amount = price
-  const orderId = orderNumber || `ORD-${Date.now()}`
-  
+  const payload = await getPayloadClient()
+  const course = await payload.findByID({ collection: 'courses', id: courseId, depth: 0 })
+
+  if (!course) {
+    console.error('Failed to send purchase confirmation: Course not found')
+    return
+  }
+
+  const courseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/kurzy/${course.slug}`
+  const priceFormatted = formatPrice(amount)
+
   const html = `
 <!DOCTYPE html>
 <html>
@@ -91,7 +101,7 @@ export async function sendPurchaseConfirmationEmail({
               </p>
               
               <p style="margin: 0 0 20px; color: #374151; font-size: 16px;">
-                Ďakujeme za nákup kurzu <strong>${courseName}</strong>! 
+                Ďakujeme za nákup kurzu <strong>${course.title}</strong>! 
                 Váš kurz je teraz aktívny a môžete začať študovať.
               </p>
               
@@ -101,13 +111,13 @@ export async function sendPurchaseConfirmationEmail({
                   <td style="padding: 20px;">
                     <p style="margin: 0 0 10px; color: #6b7280; font-size: 14px;">Detaily objednávky:</p>
                     <p style="margin: 0 0 5px; color: #374151; font-size: 14px;">
-                      <strong>Číslo objednávky:</strong> ${orderId}
+                      <strong>Číslo objednávky:</strong> ${orderNumber}
                     </p>
                     <p style="margin: 0 0 5px; color: #374151; font-size: 14px;">
-                      <strong>Kurz:</strong> ${courseName}
+                      <strong>Kurz:</strong> ${course.title}
                     </p>
                     <p style="margin: 0; color: #374151; font-size: 14px;">
-                      <strong>Suma:</strong> ${amount}
+                      <strong>Suma:</strong> ${priceFormatted}
                     </p>
                   </td>
                 </tr>
@@ -156,24 +166,47 @@ export async function sendPurchaseConfirmationEmail({
 
   return sendEmail({
     to,
-    subject: `✅ Kurz "${courseName}" je aktívny | ${siteConfig.name}`,
+    subject: `✅ Kurz "${course.title}" je aktívny | ${siteConfig.name}`,
     html,
   })
 }
 
 /**
- * Uvítací email po registrácii
+ * Uvítací email po registrácii (s dočasným heslom pre guest checkout)
  */
 export async function sendWelcomeEmail({
   to,
-  firstName,
+  customerName,
+  temporaryPassword,
+  loginUrl,
 }: {
   to: string
-  firstName?: string
+  customerName: string
+  temporaryPassword?: string
+  loginUrl?: string
 }) {
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+  const dashboardUrl = loginUrl || `${process.env.NEXT_PUBLIC_APP_URL}/prihlasenie`
   const coursesUrl = `${process.env.NEXT_PUBLIC_APP_URL}/kurzy`
   
+  const passwordSection = temporaryPassword ? `
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef3c7; border-radius: 8px; margin: 20px 0; border: 1px solid #fcd34d;">
+      <tr>
+        <td style="padding: 20px;">
+          <p style="margin: 0 0 10px; color: #92400e; font-size: 14px; font-weight: bold;">🔐 Vaše prihlasovacie údaje:</p>
+          <p style="margin: 0 0 5px; color: #78350f; font-size: 14px;">
+            <strong>Email:</strong> ${to}
+          </p>
+          <p style="margin: 0 0 10px; color: #78350f; font-size: 14px;">
+            <strong>Dočasné heslo:</strong> <code style="background: #fff; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${temporaryPassword}</code>
+          </p>
+          <p style="margin: 0; color: #92400e; font-size: 12px;">
+            ⚠️ Odporúčame si heslo po prihlásení zmeniť.
+          </p>
+        </td>
+      </tr>
+    </table>
+  ` : ''
+
   const html = `
 <!DOCTYPE html>
 <html>
@@ -199,30 +232,21 @@ export async function sendWelcomeEmail({
           <tr>
             <td style="padding: 40px;">
               <p style="margin: 0 0 20px; color: #374151; font-size: 16px;">
-                Ahoj${firstName ? ` <strong>${firstName}</strong>` : ''},
+                Ahoj <strong>${customerName}</strong>,
               </p>
               
               <p style="margin: 0 0 20px; color: #374151; font-size: 16px;">
-                Ďakujeme za registráciu! Váš účet je teraz aktívny a môžete 
-                začať objavovať naše profesionálne kurzy.
+                Váš účet bol úspešne vytvorený! Teraz máte prístup k zakúpeným kurzom.
               </p>
               
-              <p style="margin: 0 0 20px; color: #374151; font-size: 16px;">
-                Čo môžete urobiť teraz:
-              </p>
-              
-              <ul style="margin: 0 0 30px; padding-left: 20px; color: #374151; font-size: 16px;">
-                <li style="margin-bottom: 10px;">Prezrite si naše kurzy</li>
-                <li style="margin-bottom: 10px;">Vyberte si kurz, ktorý vás zaujíma</li>
-                <li>Začnite sa učiť vlastným tempom</li>
-              </ul>
+              ${passwordSection}
               
               <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center" style="padding: 20px 0;">
-                    <a href="${coursesUrl}" style="display: inline-block; background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 50px;">
-                      Prezrieť kurzy →
+                    <a href="${dashboardUrl}" style="display: inline-block; background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 50px;">
+                      Prihlásiť sa →
                     </a>
                   </td>
                 </tr>
@@ -348,4 +372,3 @@ export async function sendPasswordResetEmail({
     html,
   })
 }
-

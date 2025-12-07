@@ -36,11 +36,6 @@ export default function BuyCoursePage({ params }: Props) {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 401) {
-          // Neprihlásený - redirect na login
-          router.push(`/prihlasenie?redirect=/kurzy/${slug}/kupit`)
-          return
-        }
         throw new Error(data.error || 'Nastala chyba')
       }
 

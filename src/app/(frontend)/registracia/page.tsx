@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,6 +11,9 @@ import { Eye, EyeOff, Loader2, Check } from 'lucide-react'
 
 export default function RegisterPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectUrl = searchParams.get('redirect') || '/dashboard'
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -83,12 +86,12 @@ export default function RegisterPage() {
 
       if (!loginResponse.ok) {
         // Registrácia OK ale login zlyhal - redirect na login
-        router.push('/prihlasenie?registered=true')
+        router.push(`/prihlasenie?registered=true&redirect=${encodeURIComponent(redirectUrl)}`)
         return
       }
 
-      // Redirect to dashboard
-      router.push('/dashboard')
+      // Redirect to original page or dashboard
+      router.push(redirectUrl)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nastala chyba pri registrácii')
@@ -303,7 +306,7 @@ export default function RegisterPage() {
           <p className="mt-6 text-center text-sm text-gray-600">
             Už máte účet?{' '}
             <Link 
-              href="/prihlasenie" 
+              href={redirectUrl !== '/dashboard' ? `/prihlasenie?redirect=${encodeURIComponent(redirectUrl)}` : '/prihlasenie'} 
               className="font-semibold text-primary-600 hover:text-primary-500"
             >
               Prihláste sa
