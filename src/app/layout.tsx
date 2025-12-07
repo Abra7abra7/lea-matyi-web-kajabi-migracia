@@ -19,11 +19,16 @@ export const metadata: Metadata = {
   },
 }
 
-// Root layout is minimal - each route group has its own HTML structure
+// Root layout - required by Next.js 15
+// Each route group overrides this with their own html/body
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return (
+    <html lang="sk">
+      <body>{children}</body>
+    </html>
+  )
 }
