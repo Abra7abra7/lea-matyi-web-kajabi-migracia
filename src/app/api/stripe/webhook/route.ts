@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { verifyWebhookSignature } from '@/lib/stripe'
 import { getPayloadClient } from '@/lib/payload'
+import { sendPurchaseConfirmationEmail } from '@/lib/email'
 import type Stripe from 'stripe'
 
 export async function POST(request: Request) {
@@ -113,6 +114,26 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   console.log(`Order created for user ${userId}, course ${courseId}`)
 
-  // TODO: Odoslať email s potvrdením (Fáza 7)
+  // Odoslať email s potvrdením
+  try {
+    // Získaj kurz pre názov
+    const course = await payload.findByID({
+      collection: 'courses',
+      id: courseId,
+      depth: 0,
+    })
+    
+    await sendPurchaseConfirmationEmail({
+      to: session.customer_email || user.email,
+      customerName: (user.firstName as string) || 'Zákazník',
+      courseName: course.title,
+      price: `${((session.amount_total || 0) / 100).toFixed(2)} ${(session.currency || 'EUR').toUpperCase()}`,
+      courseUrl: `${process.env.NEXT_PUBLIC_APP_URL}/kurzy/${course.slug}`,
+    })
+    console.log(`Confirmation email sent to ${session.customer_email || user.email}`)
+  } catch (emailError) {
+    console.error('Failed to send confirmation email:', emailError)
+    // Nechceme aby zlyhanie emailu zastavilo celý webhook
+  }
 }
 

@@ -7,6 +7,12 @@ import { formatPrice, formatDuration } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { siteConfig, themeConfig } from '@/config'
 import { 
+  JsonLd, 
+  generateCourseSchema, 
+  generateBreadcrumbSchema,
+  generateOrganizationSchema 
+} from '@/lib/seo'
+import { 
   Clock, BookOpen, Award, PlayCircle, 
   Check, ChevronRight, Lock, FileText,
   Star, Users
@@ -22,9 +28,25 @@ export async function generateMetadata({ params }: Props) {
   
   if (!course) return { title: 'Kurz nenájdený' }
   
+  const coverImage = course.coverImage as any
+  const imageUrl = coverImage?.url || `${siteConfig.url}/images/og-image.jpg`
+  
   return {
     title: course.metaTitle || course.title,
     description: course.metaDescription || course.shortDescription,
+    openGraph: {
+      title: course.title,
+      description: course.shortDescription as string,
+      type: 'website',
+      url: `${siteConfig.url}/kurzy/${slug}`,
+      images: [{ url: imageUrl, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: course.title,
+      description: course.shortDescription as string,
+      images: [imageUrl],
+    },
   }
 }
 
@@ -41,8 +63,30 @@ export default async function CourseDetailPage({ params }: Props) {
   const imageUrl = coverImage?.url || '/images/course-placeholder.jpg'
   const modules = (course.modules as any[]) || []
 
+  // Schema.org pre SEO a AI vyhľadávače
+  const courseSchema = generateCourseSchema({
+    title: course.title,
+    shortDescription: course.shortDescription as string,
+    slug: slug,
+    price: course.price as number,
+    instructor: course.instructor as string,
+    totalDuration: course.totalDuration as number,
+    coverImage: coverImage,
+    category: course.category as string,
+  })
+  
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Domov', url: siteConfig.url },
+    { name: 'Kurzy', url: `${siteConfig.url}/kurzy` },
+    { name: course.title, url: `${siteConfig.url}/kurzy/${slug}` },
+  ])
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <>
+      {/* Schema.org JSON-LD pre AI vyhľadávače */}
+      <JsonLd data={[courseSchema, breadcrumbSchema]} />
+      
+      <main className="min-h-screen bg-gray-50">
       {/* Hero */}
       <section className={`py-12 lg:py-20 bg-gradient-to-br ${themeConfig.gradients.hero}`}>
         <div className="container-custom">
@@ -246,6 +290,7 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
       </section>
     </main>
+    </>
   )
 }
 

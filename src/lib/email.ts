@@ -48,18 +48,19 @@ export async function sendPurchaseConfirmationEmail({
   to,
   customerName,
   courseName,
-  courseSlug,
+  courseUrl,
   orderNumber,
-  amount,
+  price,
 }: {
   to: string
   customerName: string
   courseName: string
-  courseSlug: string
-  orderNumber: string
-  amount: string
+  courseUrl: string
+  orderNumber?: string
+  price: string
 }) {
-  const courseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/kurzy/${courseSlug}`
+  const amount = price
+  const orderId = orderNumber || `ORD-${Date.now()}`
   
   const html = `
 <!DOCTYPE html>
@@ -100,7 +101,7 @@ export async function sendPurchaseConfirmationEmail({
                   <td style="padding: 20px;">
                     <p style="margin: 0 0 10px; color: #6b7280; font-size: 14px;">Detaily objednávky:</p>
                     <p style="margin: 0 0 5px; color: #374151; font-size: 14px;">
-                      <strong>Číslo objednávky:</strong> ${orderNumber}
+                      <strong>Číslo objednávky:</strong> ${orderId}
                     </p>
                     <p style="margin: 0 0 5px; color: #374151; font-size: 14px;">
                       <strong>Kurz:</strong> ${courseName}

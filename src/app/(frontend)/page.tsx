@@ -1,8 +1,16 @@
 import Link from 'next/link'
 import { siteConfig, themeConfig } from '@/config'
 import { Play, ChevronRight, Award, Clock, Smartphone, FileText } from 'lucide-react'
+import { JsonLd, generateOrganizationSchema, generateWebPageSchema } from '@/lib/seo'
 
 export default function HomePage() {
+  // Schema.org pre SEO
+  const organizationSchema = generateOrganizationSchema()
+  const webPageSchema = generateWebPageSchema({
+    title: siteConfig.seo.title,
+    description: siteConfig.seo.description,
+    url: siteConfig.url,
+  })
   const { content } = siteConfig
   const { hero, stats, cta, benefits } = content
 
@@ -14,7 +22,11 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <>
+      {/* Schema.org JSON-LD pre AI vyhľadávače */}
+      <JsonLd data={[organizationSchema, webPageSchema]} />
+      
+      <main className="min-h-screen">
       {/* ═══════════════════════════════════════════════════════════
           HERO SEKCIA
           ═══════════════════════════════════════════════════════════ */}
@@ -224,6 +236,7 @@ export default function HomePage() {
         </div>
       </footer>
     </main>
+    </>
   )
 }
 
