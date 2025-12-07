@@ -21,20 +21,9 @@ export default buildConfig({
       titleSuffix: ' | Beauty Academy Admin',
     },
     
-    // Custom komponenty
+    // Custom komponenty - len tie čo fungujú
     components: {
-      // Logo v navigácii
-      graphics: {
-        Logo: '@/components/admin/Logo',
-        Icon: '@/components/admin/Icon',
-      },
-      
-      // Before login - branding
-      beforeLogin: [
-        '@/components/admin/BeforeLogin',
-      ],
-      
-      // After dashboard - stats
+      // Dashboard stats - funguje
       afterDashboard: [
         '@/components/admin/DashboardStats',
       ],
