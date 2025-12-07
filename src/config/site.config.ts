@@ -1,3 +1,14 @@
+// Helper pre správne formátovanie URL
+function getAppUrl(): string {
+  const url = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  // Pridaj https:// ak chýba protokol
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `https://${url}`
+  }
+  // Odstráň trailing slash
+  return url.replace(/\/$/, '')
+}
+
 export const siteConfig = {
   // ═══════════════════════════════════════════════════════════
   // ZÁKLADNÉ ÚDAJE
@@ -8,7 +19,7 @@ export const siteConfig = {
   tagline: 'Staňte sa profesionálom v beauty priemysle',
   
   // URL (bez trailing slash)
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  url: getAppUrl(),
   
   // ═══════════════════════════════════════════════════════════
   // KONTAKTNÉ ÚDAJE
