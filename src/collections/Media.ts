@@ -3,8 +3,14 @@ import { CollectionConfig } from 'payload'
 export const Media: CollectionConfig = {
   slug: 'media',
   
+  labels: {
+    singular: 'Médium',
+    plural: 'Médiá',
+  },
+  
   admin: {
-    group: 'Médiá',
+    group: 'Systém',
+    description: 'Obrázky a súbory',
   },
   
   upload: {

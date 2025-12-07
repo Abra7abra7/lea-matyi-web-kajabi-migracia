@@ -3,20 +3,29 @@ import { CollectionConfig } from 'payload'
 export const Courses: CollectionConfig = {
   slug: 'courses',
   
+  labels: {
+    singular: 'Kurz',
+    plural: 'Kurzy',
+  },
+  
   admin: {
     useAsTitle: 'title',
-    group: 'Kurzy',
-    defaultColumns: ['title', 'status', 'price', 'updatedAt'],
+    defaultColumns: ['title', 'status', 'price', 'lessonsCount', 'updatedAt'],
+    description: 'Správa online kurzov',
+    listSearchableFields: ['title', 'slug', 'instructor'],
   },
   
   fields: [
-    // Základné info - Tab
+    // ═══════════════════════════════════════════════════════════
+    // TABS LAYOUT
+    // ═══════════════════════════════════════════════════════════
     {
       type: 'tabs',
       tabs: [
-        // TAB 1: Základné informácie
+        // TAB 1: ZÁKLADNÉ INFO
         {
-          label: 'Základné info',
+          label: '📋 Základné info',
+          description: 'Hlavné údaje o kurze',
           fields: [
             {
               name: 'title',
@@ -31,113 +40,116 @@ export const Courses: CollectionConfig = {
               required: true,
               unique: true,
               admin: {
-                description: 'URL adresa kurzu (napr. "permanentny-makeup-zaklady")',
+                description: 'napr. "permanentny-makeup-zaklady"',
               },
             },
-            {
-              name: 'shortDescription',
-              type: 'textarea',
-              label: 'Krátky popis',
-              maxLength: 200,
-              admin: {
-                description: 'Zobrazuje sa v kartách kurzov (max 200 znakov)',
-              },
-            },
-            {
-              name: 'description',
-              type: 'richText',
-              label: 'Dlhý popis',
-              admin: {
-                description: 'Plný popis kurzu pre detailnú stránku',
-              },
-            },
-            {
-              name: 'coverImage',
-              type: 'upload',
-              relationTo: 'media',
-              label: 'Titulný obrázok',
-              required: true,
-            },
-            {
-              name: 'previewVideoId',
-              type: 'text',
-              label: 'Preview Video ID (Cloudflare)',
-              admin: {
-                description: 'Cloudflare Stream Video ID pre ukážkové video',
-              },
-            },
-          ],
-        },
-        
-        // TAB 2: Cena a predaj
-        {
-          label: 'Cena a predaj',
-          fields: [
             {
               type: 'row',
               fields: [
                 {
                   name: 'price',
                   type: 'number',
-                  label: 'Cena (EUR)',
+                  label: '💰 Cena (EUR)',
                   required: true,
                   min: 0,
-                  admin: {
-                    width: '33%',
-                  },
+                  admin: { width: '25%' },
                 },
                 {
                   name: 'originalPrice',
                   type: 'number',
-                  label: 'Pôvodná cena (EUR)',
-                  admin: {
-                    width: '33%',
-                    description: 'Pre zobrazenie zľavy',
-                  },
+                  label: 'Pôvodná cena',
+                  admin: { width: '25%', description: 'Pre zľavu' },
                 },
                 {
-                  name: 'stripePriceId',
-                  type: 'text',
-                  label: 'Stripe Price ID',
-                  admin: {
-                    width: '33%',
-                    description: 'ID ceny zo Stripe Dashboard',
-                  },
+                  name: 'status',
+                  type: 'select',
+                  label: '📊 Stav',
+                  defaultValue: 'draft',
+                  required: true,
+                  options: [
+                    { label: '📝 Rozpracovaný', value: 'draft' },
+                    { label: '✅ Publikovaný', value: 'published' },
+                    { label: '📦 Archivovaný', value: 'archived' },
+                  ],
+                  admin: { width: '25%' },
+                },
+                {
+                  name: 'category',
+                  type: 'select',
+                  label: '📁 Kategória',
+                  options: [
+                    { label: 'Permanentný makeup', value: 'pmu' },
+                    { label: 'Nechty', value: 'nails' },
+                    { label: 'Kozmetika', value: 'cosmetics' },
+                    { label: 'Líčenie', value: 'makeup' },
+                    { label: 'Vlasy', value: 'hair' },
+                    { label: 'Iné', value: 'other' },
+                  ],
+                  admin: { width: '25%' },
                 },
               ],
             },
             {
-              name: 'status',
-              type: 'select',
-              label: 'Stav',
-              defaultValue: 'draft',
+              name: 'coverImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: '🖼️ Titulný obrázok',
               required: true,
-              options: [
-                { label: '📝 Rozpracovaný', value: 'draft' },
-                { label: '✅ Publikovaný', value: 'published' },
-                { label: '📦 Archivovaný', value: 'archived' },
+            },
+            {
+              name: 'shortDescription',
+              type: 'textarea',
+              label: 'Krátky popis',
+              maxLength: 200,
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'difficulty',
+                  type: 'select',
+                  label: '📈 Obtiažnosť',
+                  options: [
+                    { label: '🟢 Začiatočník', value: 'beginner' },
+                    { label: '🟡 Mierne pokročilý', value: 'intermediate' },
+                    { label: '🔴 Pokročilý', value: 'advanced' },
+                  ],
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'instructor',
+                  type: 'text',
+                  label: '👩‍🏫 Lektor',
+                  admin: { width: '50%' },
+                },
               ],
             },
           ],
         },
         
-        // TAB 3: Obsah kurzu (Moduly a Lekcie)
+        // TAB 2: OBSAH KURZU
         {
-          label: 'Obsah kurzu',
+          label: '🎬 Obsah kurzu',
+          description: 'Moduly a video lekcie',
           fields: [
             {
               name: 'modules',
               type: 'array',
-              label: 'Moduly',
+              label: '📚 Moduly',
+              labels: { singular: 'Modul', plural: 'Moduly' },
               admin: {
-                description: 'Rozdeľte kurz do logických modulov',
+                description: 'Každý modul obsahuje video lekcie. Kliknite na "+ Pridať Modul"',
+                initCollapsed: false,
               },
               fields: [
                 {
                   name: 'title',
                   type: 'text',
-                  label: 'Názov modulu',
+                  label: '📁 Názov modulu',
                   required: true,
+                  admin: {
+                    placeholder: 'napr. Modul 1: Úvod',
+                  },
                 },
                 {
                   name: 'description',
@@ -147,13 +159,50 @@ export const Courses: CollectionConfig = {
                 {
                   name: 'lessons',
                   type: 'array',
-                  label: 'Lekcie',
+                  label: '🎬 Lekcie',
+                  labels: { singular: 'Lekcia', plural: 'Lekcie' },
+                  admin: {
+                    initCollapsed: true,
+                    description: 'Video lekcie v module',
+                  },
                   fields: [
                     {
                       name: 'title',
                       type: 'text',
-                      label: 'Názov lekcie',
+                      label: '🎬 Názov lekcie',
                       required: true,
+                      admin: {
+                        placeholder: 'napr. Lekcia 1: Základy',
+                      },
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'videoId',
+                          type: 'text',
+                          label: '📹 Video ID',
+                          required: true,
+                          admin: {
+                            width: '50%',
+                            description: 'Z Cloudflare Stream',
+                          },
+                        },
+                        {
+                          name: 'duration',
+                          type: 'number',
+                          label: '⏱️ Dĺžka (min)',
+                          min: 0,
+                          admin: { width: '25%' },
+                        },
+                        {
+                          name: 'isFree',
+                          type: 'checkbox',
+                          label: '🆓 Zadarmo',
+                          defaultValue: false,
+                          admin: { width: '25%' },
+                        },
+                      ],
                     },
                     {
                       name: 'description',
@@ -161,47 +210,37 @@ export const Courses: CollectionConfig = {
                       label: 'Popis lekcie',
                     },
                     {
-                      name: 'videoId',
-                      type: 'text',
-                      label: 'Cloudflare Video ID',
-                      required: true,
-                      admin: {
-                        description: 'ID videa z Cloudflare Stream',
-                      },
-                    },
-                    {
-                      name: 'duration',
-                      type: 'number',
-                      label: 'Dĺžka (minúty)',
-                      min: 0,
-                    },
-                    {
-                      name: 'isFree',
-                      type: 'checkbox',
-                      label: 'Voľne dostupná lekcia',
-                      defaultValue: false,
-                      admin: {
-                        description: 'Ukážková lekcia zadarmo',
-                      },
-                    },
-                    // Materiály na stiahnutie
-                    {
-                      name: 'resources',
-                      type: 'array',
-                      label: 'Materiály na stiahnutie',
+                      type: 'collapsible',
+                      label: '📎 Materiály na stiahnutie',
+                      admin: { initCollapsed: true },
                       fields: [
                         {
-                          name: 'title',
-                          type: 'text',
-                          label: 'Názov súboru',
-                          required: true,
-                        },
-                        {
-                          name: 'file',
-                          type: 'upload',
-                          relationTo: 'media',
-                          label: 'Súbor',
-                          required: true,
+                          name: 'resources',
+                          type: 'array',
+                          label: 'Súbory',
+                          labels: { singular: 'Súbor', plural: 'Súbory' },
+                          fields: [
+                            {
+                              type: 'row',
+                              fields: [
+                                {
+                                  name: 'title',
+                                  type: 'text',
+                                  label: 'Názov',
+                                  required: true,
+                                  admin: { width: '50%' },
+                                },
+                                {
+                                  name: 'file',
+                                  type: 'upload',
+                                  relationTo: 'media',
+                                  label: 'Súbor',
+                                  required: true,
+                                  admin: { width: '50%' },
+                                },
+                              ],
+                            },
+                          ],
                         },
                       ],
                     },
@@ -212,97 +251,60 @@ export const Courses: CollectionConfig = {
           ],
         },
         
-        // TAB 4: SEO
+        // TAB 3: POPIS
         {
-          label: 'SEO',
+          label: '📝 Popis',
           fields: [
             {
-              name: 'metaTitle',
+              name: 'description',
+              type: 'richText',
+              label: 'Detailný popis kurzu',
+            },
+          ],
+        },
+        
+        // TAB 4: NASTAVENIA
+        {
+          label: '⚙️ Nastavenia',
+          fields: [
+            {
+              name: 'stripePriceId',
               type: 'text',
-              label: 'Meta Title',
-              admin: {
-                description: 'SEO nadpis pre vyhľadávače',
-              },
+              label: '💳 Stripe Price ID',
+              admin: { description: 'Pre online platby' },
             },
             {
-              name: 'metaDescription',
-              type: 'textarea',
-              label: 'Meta Description',
-              maxLength: 160,
-              admin: {
-                description: 'SEO popis (max 160 znakov)',
-              },
+              name: 'previewVideoId',
+              type: 'text',
+              label: '🎥 Preview Video ID',
             },
             {
-              name: 'keywords',
-              type: 'text',
-              label: 'Kľúčové slová',
-              admin: {
-                description: 'Oddelené čiarkou',
-              },
+              type: 'collapsible',
+              label: '🔍 SEO',
+              admin: { initCollapsed: true },
+              fields: [
+                { name: 'metaTitle', type: 'text', label: 'Meta Title' },
+                { name: 'metaDescription', type: 'textarea', label: 'Meta Description', maxLength: 160 },
+                { name: 'keywords', type: 'text', label: 'Kľúčové slová' },
+              ],
             },
           ],
         },
       ],
     },
     
-    // Sidebar fields
-    {
-      name: 'instructor',
-      type: 'text',
-      label: 'Lektor',
-      admin: {
-        position: 'sidebar',
-      },
-    },
+    // SIDEBAR
     {
       name: 'totalDuration',
       type: 'number',
-      label: 'Celková dĺžka (min)',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        description: 'Automaticky vypočítané',
-      },
+      label: '⏱️ Celková dĺžka',
+      admin: { position: 'sidebar', readOnly: true, description: 'minút' },
     },
     {
       name: 'lessonsCount',
       type: 'number',
-      label: 'Počet lekcií',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        description: 'Automaticky vypočítané',
-      },
-    },
-    {
-      name: 'difficulty',
-      type: 'select',
-      label: 'Obtiažnosť',
-      options: [
-        { label: '🟢 Začiatočník', value: 'beginner' },
-        { label: '🟡 Mierne pokročilý', value: 'intermediate' },
-        { label: '🔴 Pokročilý', value: 'advanced' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'category',
-      type: 'select',
-      label: 'Kategória',
-      options: [
-        { label: 'Permanentný makeup', value: 'pmu' },
-        { label: 'Nechty', value: 'nails' },
-        { label: 'Kozmetika', value: 'cosmetics' },
-        { label: 'Líčenie', value: 'makeup' },
-        { label: 'Vlasy', value: 'hair' },
-        { label: 'Iné', value: 'other' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
+      label: '🎬 Počet lekcií',
+      admin: { position: 'sidebar', readOnly: true },
     },
   ],
   
@@ -310,7 +312,6 @@ export const Courses: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data }) => {
-        // Vypočítaj celkovú dĺžku a počet lekcií
         let totalDuration = 0
         let lessonsCount = 0
         
@@ -337,9 +338,7 @@ export const Courses: CollectionConfig = {
   
   access: {
     read: ({ req: { user } }) => {
-      // Admin vidí všetko
       if (user?.role === 'admin') return true
-      // Ostatní vidia len publikované
       return { status: { equals: 'published' } }
     },
     create: ({ req: { user } }) => user?.role === 'admin',
@@ -349,4 +348,3 @@ export const Courses: CollectionConfig = {
   
   timestamps: true,
 }
-

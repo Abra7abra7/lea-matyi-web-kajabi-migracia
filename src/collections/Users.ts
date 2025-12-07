@@ -3,21 +3,30 @@ import { CollectionConfig } from 'payload'
 export const Users: CollectionConfig = {
   slug: 'users',
   
+  labels: {
+    singular: 'Používateľ',
+    plural: 'Používatelia',
+  },
+  
   admin: {
     useAsTitle: 'email',
+    defaultColumns: ['email', 'firstName', 'lastName', 'role', 'purchasedCourses', 'createdAt'],
+    description: 'Zákazníci a administrátori systému',
+    listSearchableFields: ['email', 'firstName', 'lastName'],
     group: 'Používatelia',
-    defaultColumns: ['email', 'firstName', 'lastName', 'role', 'createdAt'],
   },
   
   auth: {
     tokenExpiration: 60 * 60 * 24 * 7, // 7 dní
-    verify: false, // Email verifikácia - môžeme zapnúť neskôr
+    verify: false,
     maxLoginAttempts: 5,
     lockTime: 600000, // 10 minút lockout
   },
   
   fields: [
-    // Základné údaje
+    // ═══════════════════════════════════════════════════════════
+    // ZÁKLADNÉ ÚDAJE
+    // ═══════════════════════════════════════════════════════════
     {
       type: 'row',
       fields: [
@@ -25,51 +34,51 @@ export const Users: CollectionConfig = {
           name: 'firstName',
           type: 'text',
           label: 'Meno',
+          admin: {
+            width: '50%',
+          },
         },
         {
           name: 'lastName',
           type: 'text',
           label: 'Priezvisko',
+          admin: {
+            width: '50%',
+          },
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'phone',
+          type: 'text',
+          label: 'Telefón',
+          admin: {
+            width: '50%',
+          },
+        },
+        {
+          name: 'role',
+          type: 'select',
+          label: 'Rola',
+          defaultValue: 'customer',
+          required: true,
+          options: [
+            { label: '👤 Zákazník', value: 'customer' },
+            { label: '🔑 Admin', value: 'admin' },
+          ],
+          admin: {
+            width: '50%',
+          },
         },
       ],
     },
     
-    // Telefónne číslo
-    {
-      name: 'phone',
-      type: 'text',
-      label: 'Telefón',
-    },
-    
-    // Rola používateľa
-    {
-      name: 'role',
-      type: 'select',
-      label: 'Rola',
-      defaultValue: 'customer',
-      required: true,
-      options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'Zákazník', value: 'customer' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    
-    // Stripe Customer ID
-    {
-      name: 'stripeCustomerId',
-      type: 'text',
-      label: 'Stripe Customer ID',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        description: 'Automaticky vytvorené pri prvej platbe',
-      },
-    },
-    
-    // Zakúpené kurzy
+    // ═══════════════════════════════════════════════════════════
+    // ZAKÚPENÉ KURZY
+    // ═══════════════════════════════════════════════════════════
     {
       name: 'purchasedCourses',
       type: 'relationship',
@@ -81,62 +90,76 @@ export const Users: CollectionConfig = {
       },
     },
     
-    // Progress v kurzoch
+    // ═══════════════════════════════════════════════════════════
+    // PROGRESS (collapsible)
+    // ═══════════════════════════════════════════════════════════
     {
-      name: 'courseProgress',
-      type: 'array',
+      type: 'collapsible',
       label: 'Progress v kurzoch',
       admin: {
-        description: 'Sledovanie postupu v jednotlivých kurzoch',
+        initCollapsed: true,
       },
       fields: [
         {
-          name: 'course',
-          type: 'relationship',
-          relationTo: 'courses',
-          required: true,
-          label: 'Kurz',
-        },
-        {
-          name: 'completedLessons',
-          type: 'json',
-          label: 'Dokončené lekcie',
-          admin: {
-            description: 'Array: ["0-0", "0-1", "1-0"] = modul-lekcia indexy',
-          },
-        },
-        {
-          name: 'lastWatchedLesson',
-          type: 'text',
-          label: 'Posledná sledovaná lekcia',
-          admin: {
-            description: 'Format: "modul-lekcia" (napr. "0-2")',
-          },
-        },
-        {
-          name: 'percentComplete',
-          type: 'number',
-          label: 'Percento dokončenia',
-          min: 0,
-          max: 100,
-          defaultValue: 0,
+          name: 'courseProgress',
+          type: 'array',
+          label: 'Sledovanie postupu',
+          fields: [
+            {
+              name: 'course',
+              type: 'relationship',
+              relationTo: 'courses',
+              required: true,
+              label: 'Kurz',
+            },
+            {
+              name: 'completedLessons',
+              type: 'json',
+              label: 'Dokončené lekcie',
+            },
+            {
+              name: 'lastWatchedLesson',
+              type: 'text',
+              label: 'Posledná lekcia',
+            },
+            {
+              name: 'percentComplete',
+              type: 'number',
+              label: 'Percento',
+              min: 0,
+              max: 100,
+              defaultValue: 0,
+            },
+          ],
         },
       ],
     },
     
-    // Avatar
+    // ═══════════════════════════════════════════════════════════
+    // SIDEBAR
+    // ═══════════════════════════════════════════════════════════
     {
       name: 'avatar',
       type: 'upload',
       relationTo: 'media',
-      label: 'Profilová fotka',
+      label: 'Fotka',
+      admin: {
+        position: 'sidebar',
+      },
     },
-    
-    // Marketingový súhlas
+    {
+      name: 'stripeCustomerId',
+      type: 'text',
+      label: 'Stripe ID',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
     {
       name: 'marketingConsent',
       type: 'checkbox',
-      label: 'Súhlas s marketingom',
+      label: 'Marketing súhlas',
       defaultValue: false,
       admin: {
         position: 'sidebar',
@@ -144,12 +167,9 @@ export const Users: CollectionConfig = {
     },
   ],
   
-  // Access control
   access: {
-    // Admin môže všetko
     read: ({ req: { user } }) => {
       if (user?.role === 'admin') return true
-      // Používateľ môže čítať len seba
       return { id: { equals: user?.id } }
     },
     update: ({ req: { user } }) => {
@@ -157,9 +177,8 @@ export const Users: CollectionConfig = {
       return { id: { equals: user?.id } }
     },
     delete: ({ req: { user } }) => user?.role === 'admin',
-    create: () => true, // Registrácia
+    create: () => true,
   },
   
   timestamps: true,
 }
-

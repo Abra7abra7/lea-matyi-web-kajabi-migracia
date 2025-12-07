@@ -3,10 +3,15 @@ import { CollectionConfig } from 'payload'
 export const Orders: CollectionConfig = {
   slug: 'orders',
   
+  labels: {
+    singular: 'Objednávka',
+    plural: 'Objednávky',
+  },
+  
   admin: {
     useAsTitle: 'orderNumber',
-    group: 'Predaje',
     defaultColumns: ['orderNumber', 'customer', 'course', 'total', 'status', 'createdAt'],
+    description: 'Prehľad všetkých objednávok',
   },
   
   fields: [

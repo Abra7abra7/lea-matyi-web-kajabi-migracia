@@ -21,9 +21,18 @@ export default buildConfig({
       titleSuffix: ' | Beauty Academy Admin',
     },
     
-    // Custom komponenty - len tie čo fungujú
+    // Custom komponenty
     components: {
-      // Dashboard stats - funguje
+      // Branding
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+      // Before login screen
+      beforeLogin: [
+        '@/components/admin/BeforeLogin',
+      ],
+      // Dashboard stats
       afterDashboard: [
         '@/components/admin/DashboardStats',
       ],
@@ -34,9 +43,9 @@ export default buildConfig({
   },
   
   // ═══════════════════════════════════════════════════════════
-  // COLLECTIONS
+  // COLLECTIONS - poradie v navigácii
   // ═══════════════════════════════════════════════════════════
-  collections: [Users, Media, Courses, Orders],
+  collections: [Courses, Orders, Users, Media],
   
   // ═══════════════════════════════════════════════════════════
   // EDITOR

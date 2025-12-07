@@ -1,9 +1,8 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT - THE CHANGES WILL BE OVERWRITTEN */
-import type { ServerFunctionClient } from 'payload'
-
 import config from '@payload-config'
-import { RootLayout } from '@payloadcms/next/layouts'
+import '@payloadcms/next/css'
+import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
+import type { ServerFunctionClient } from 'payload'
 import React from 'react'
 
 import { importMap } from './admin/importMap.js'
@@ -15,8 +14,11 @@ type Args = {
 
 const serverFunction: ServerFunctionClient = async function (args) {
   'use server'
-  const { default: payload } = await import('payload')
-  return payload.serverFunctionHandler(args)
+  return handleServerFunctions({
+    ...args,
+    config,
+    importMap,
+  })
 }
 
 const Layout = ({ children }: Args) => (
@@ -26,4 +28,3 @@ const Layout = ({ children }: Args) => (
 )
 
 export default Layout
-
