@@ -1,5 +1,5 @@
 import { buildConfig } from 'payload'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -68,11 +68,11 @@ export default buildConfig({
   },
   
   // ═══════════════════════════════════════════════════════════
-  // DATABÁZA - SQLite pre lokálny vývoj
+  // DATABÁZA - PostgreSQL (Neon.tech)
   // ═══════════════════════════════════════════════════════════
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL || 'file:./database.db',
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL,
     },
   }),
   
