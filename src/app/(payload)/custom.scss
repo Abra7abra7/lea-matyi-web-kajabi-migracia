@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    BEAUTY ACADEMY - DARK ADMIN THEME
+   Kompaktné a prehľadné rozloženie
    ═══════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════
@@ -10,7 +11,6 @@
 }
 
 [data-theme="light"] {
-  // Override light theme to be dark
   --theme-bg: #0f0f0f;
   --theme-text: #ffffff;
   --theme-elevation-0: #0f0f0f;
@@ -18,59 +18,60 @@
   --theme-elevation-100: #1f1f1f;
   --theme-elevation-150: #262626;
   --theme-elevation-200: #2d2d2d;
-  --theme-elevation-250: #333333;
   --theme-elevation-300: #404040;
-  --theme-elevation-350: #4d4d4d;
   --theme-elevation-400: #5c5c5c;
-  --theme-elevation-450: #6b6b6b;
   --theme-elevation-500: #7a7a7a;
-  --theme-elevation-550: #8a8a8a;
   --theme-elevation-600: #999999;
-  --theme-elevation-650: #a8a8a8;
   --theme-elevation-700: #b8b8b8;
-  --theme-elevation-750: #c7c7c7;
   --theme-elevation-800: #d6d6d6;
-  --theme-elevation-850: #e6e6e6;
-  --theme-elevation-900: #f5f5f5;
-  --theme-elevation-950: #fafafa;
-  --theme-elevation-1000: #ffffff;
-  
-  // Accent colors
   --theme-success-500: #ec4899;
   --theme-success-400: #f472b6;
-  --theme-error-500: #ef4444;
-  --theme-warning-500: #f59e0b;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   GLOBAL OVERRIDES
-   ═══════════════════════════════════════════════════════════ */
 body {
   background: #0f0f0f !important;
   color: #ffffff !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   LOGIN PAGE
+   LOGIN PAGE - CENTERED & COMPACT
    ═══════════════════════════════════════════════════════════ */
 .login {
   background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%) !important;
   min-height: 100vh;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  
+  &__brand {
+    text-align: center;
+    margin-bottom: 32px;
+  }
   
   &__form-wrapper {
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
     background: rgba(23, 23, 23, 0.95) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 16px !important;
+    border-radius: 20px !important;
+    padding: 40px !important;
     backdrop-filter: blur(10px);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  &__form {
+    max-width: 100% !important;
   }
   
   .btn--style-primary {
     background: linear-gradient(135deg, #ec4899, #f43f5e) !important;
     border: none !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
     font-weight: 600 !important;
-    padding: 12px 24px !important;
+    padding: 14px 28px !important;
+    width: 100% !important;
     transition: all 0.3s ease !important;
     
     &:hover {
@@ -81,22 +82,34 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   NAVIGATION / SIDEBAR
+   MAIN LAYOUT - COMPACT
    ═══════════════════════════════════════════════════════════ */
-.template-default__nav {
+.template-default {
   background: #0f0f0f !important;
+}
+
+.template-default__nav {
+  width: 260px !important;
+  min-width: 260px !important;
+  background: #0a0a0a !important;
   border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION / SIDEBAR - COMPACT
+   ═══════════════════════════════════════════════════════════ */
 .nav-wrapper {
-  background: #0f0f0f !important;
+  background: #0a0a0a !important;
+  padding: 16px 8px !important;
 }
 
 .nav {
   &__link {
     color: rgba(255, 255, 255, 0.7) !important;
-    border-radius: 8px !important;
-    margin: 2px 8px !important;
+    border-radius: 10px !important;
+    margin: 4px 8px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
     transition: all 0.2s ease !important;
     
     &:hover {
@@ -107,7 +120,7 @@ body {
     &--active {
       background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(244, 63, 94, 0.1)) !important;
       color: #ec4899 !important;
-      border-left: 3px solid #ec4899 !important;
+      font-weight: 600 !important;
     }
   }
   
@@ -116,60 +129,141 @@ body {
     text-transform: uppercase !important;
     font-size: 10px !important;
     font-weight: 700 !important;
-    letter-spacing: 1px !important;
-    padding: 16px 16px 8px !important;
+    letter-spacing: 1.5px !important;
+    padding: 20px 16px 8px !important;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DASHBOARD / MAIN CONTENT
+   DASHBOARD - CENTERED & MAX WIDTH
    ═══════════════════════════════════════════════════════════ */
 .dashboard {
   background: #0f0f0f !important;
+  padding: 32px !important;
   
   &__wrap {
-    background: #0f0f0f !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 24px !important;
+  }
+  
+  &__label {
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    margin-bottom: 16px !important;
+    font-weight: 600 !important;
+  }
+  
+  &__card-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    margin-bottom: 32px !important;
   }
   
   &__card {
     background: #171717 !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 12px !important;
-    transition: all 0.2s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    transition: all 0.25s ease !important;
     
     &:hover {
       border-color: rgba(236, 72, 153, 0.3) !important;
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    &-title {
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      color: #fff !important;
+      margin-bottom: 16px !important;
     }
   }
 }
 
-.template-default {
-  background: #0f0f0f !important;
-}
-
 /* ═══════════════════════════════════════════════════════════
-   CARDS & PANELS
+   COLLECTION LIST - CENTERED
    ═══════════════════════════════════════════════════════════ */
-.card,
-.collection-list,
-.document-drawer__content {
-  background: #171717 !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  border-radius: 12px !important;
+.collection-list {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 32px !important;
+  background: transparent !important;
+  
+  &__header {
+    margin-bottom: 24px !important;
+  }
+  
+  &__wrap {
+    background: #171717 !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   FORM FIELDS
+   DOCUMENT EDIT - CENTERED
+   ═══════════════════════════════════════════════════════════ */
+.doc-controls,
+.document-fields {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
+
+.document-fields {
+  padding: 32px !important;
+  
+  > .render-fields {
+    background: #171717 !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 32px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER - COMPACT
+   ═══════════════════════════════════════════════════════════ */
+.app-header {
+  background: rgba(10, 10, 10, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  height: 60px !important;
+  padding: 0 24px !important;
+}
+
+.doc-header {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 24px 32px !important;
+  background: transparent !important;
+  
+  &__title {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORM FIELDS - BETTER SPACING
    ═══════════════════════════════════════════════════════════ */
 .field-type {
+  margin-bottom: 24px !important;
+  
   input,
   textarea,
   select {
     background: #1f1f1f !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
     color: #fff !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
     transition: all 0.2s ease !important;
     
     &:focus {
@@ -183,22 +277,40 @@ body {
     }
   }
   
+  textarea {
+    min-height: 120px !important;
+  }
+  
   label {
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 500 !important;
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+    display: block !important;
   }
   
   .field-description {
     color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 12px !important;
+    margin-top: 6px !important;
   }
 }
 
+/* Row fields */
+.field-type.row {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 20px !important;
+}
+
 /* ═══════════════════════════════════════════════════════════
-   BUTTONS
+   BUTTONS - MODERN
    ═══════════════════════════════════════════════════════════ */
 .btn {
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   font-weight: 500 !important;
+  padding: 10px 20px !important;
+  font-size: 13px !important;
   transition: all 0.2s ease !important;
   
   &--style-primary {
@@ -222,41 +334,62 @@ body {
       color: #ec4899 !important;
     }
   }
+  
+  &--size-small {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TABLES
+   TABLES - COMPACT
    ═══════════════════════════════════════════════════════════ */
 .table {
   background: transparent !important;
   
   &__header {
-    background: #171717 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-  }
-  
-  &__row {
-    background: #171717 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
-    transition: all 0.15s ease !important;
+    background: rgba(255, 255, 255, 0.02) !important;
     
-    &:hover {
-      background: #1f1f1f !important;
+    th {
+      padding: 14px 16px !important;
+      font-size: 11px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      font-weight: 600 !important;
     }
   }
   
-  &__cell {
-    color: rgba(255, 255, 255, 0.8) !important;
+  &__row {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    transition: all 0.15s ease !important;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.02) !important;
+    }
+    
+    td {
+      padding: 16px !important;
+      font-size: 13px !important;
+    }
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TABS
+   TABS - MODERN
    ═══════════════════════════════════════════════════════════ */
 .tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  margin-bottom: 24px !important;
+  
   &__tab-button {
     color: rgba(255, 255, 255, 0.5) !important;
+    padding: 12px 20px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
     transition: all 0.2s ease !important;
+    border-bottom: 2px solid transparent !important;
     
     &:hover {
       color: rgba(255, 255, 255, 0.8) !important;
@@ -270,24 +403,32 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ARRAY FIELDS (Modules/Lessons)
+   ARRAY FIELDS (Modules/Lessons) - COMPACT
    ═══════════════════════════════════════════════════════════ */
 .array-field {
   &__row {
-    background: #1f1f1f !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 10px !important;
-    margin-bottom: 8px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+    margin-bottom: 12px !important;
+    padding: 20px !important;
     
     &:hover {
-      border-color: rgba(236, 72, 153, 0.3) !important;
+      border-color: rgba(236, 72, 153, 0.2) !important;
+    }
+    
+    &-header {
+      padding-bottom: 16px !important;
+      margin-bottom: 16px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
     }
   }
   
   &__add-row {
-    border: 2px dashed rgba(236, 72, 153, 0.3) !important;
-    border-radius: 10px !important;
-    color: rgba(255, 255, 255, 0.5) !important;
+    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    padding: 20px !important;
     transition: all 0.2s ease !important;
     
     &:hover {
@@ -298,10 +439,28 @@ body {
   }
   
   &__drag-handle {
-    color: rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.2) !important;
     
     &:hover {
       color: #ec4899 !important;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UPLOAD DROPZONE
+   ═══════════════════════════════════════════════════════════ */
+.upload {
+  &__dropzone {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 40px !important;
+    
+    &:hover,
+    &--dragging {
+      border-color: #ec4899 !important;
+      background: rgba(236, 72, 153, 0.05) !important;
     }
   }
 }
@@ -313,23 +472,27 @@ body {
   &__editor {
     background: #1f1f1f !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
     color: #fff !important;
+    min-height: 200px !important;
   }
   
   &__toolbar {
-    background: #171717 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 8px !important;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   STATUS BADGES / PILLS
+   STATUS BADGES
    ═══════════════════════════════════════════════════════════ */
 .pill {
   border-radius: 20px !important;
   font-size: 11px !important;
   font-weight: 600 !important;
+  padding: 4px 12px !important;
   
   &--style-success {
     background: rgba(16, 185, 129, 0.15) !important;
@@ -348,80 +511,17 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   UPLOAD DROPZONE
-   ═══════════════════════════════════════════════════════════ */
-.upload {
-  &__dropzone {
-    background: #1f1f1f !important;
-    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
-    
-    &:hover,
-    &--dragging {
-      border-color: #ec4899 !important;
-      background: rgba(236, 72, 153, 0.05) !important;
-    }
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════════════════════════ */
-.app-header {
-  background: rgba(15, 15, 15, 0.95) !important;
-  backdrop-filter: blur(10px) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SCROLLBAR
-   ═══════════════════════════════════════════════════════════ */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f0f0f;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-  
-  &:hover {
-    background: #444;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   ANIMATIONS
-   ═══════════════════════════════════════════════════════════ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.dashboard,
-.collection-list,
-.document-fields {
-  animation: fadeIn 0.3s ease;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DOCUMENT HEADER
-   ═══════════════════════════════════════════════════════════ */
-.doc-header {
-  background: #0f0f0f !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   GUTTER / SIDEBAR
+   GUTTER / SIDEBAR (right side)
    ═══════════════════════════════════════════════════════════ */
 .gutter {
-  background: #171717 !important;
+  background: #0a0a0a !important;
   border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 24px !important;
+  width: 300px !important;
+  
+  .field-type {
+    margin-bottom: 20px !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -432,15 +532,115 @@ body {
   &__content {
     background: #171717 !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    max-width: 600px !important;
+    border-radius: 16px !important;
   }
   
   &__header {
     background: #0f0f0f !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    padding: 20px 24px !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+  
+  &__content-wrap {
+    padding: 24px !important;
   }
 }
 
 .ReactModal__Overlay {
-  background: rgba(0, 0, 0, 0.8) !important;
-  backdrop-filter: blur(4px) !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR - THIN
+   ═══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard,
+.collection-list,
+.document-fields {
+  animation: fadeIn 0.25s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SELECT / DROPDOWN
+   ═══════════════════════════════════════════════════════════ */
+.rs__control {
+  background: #1f1f1f !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  
+  &--is-focused {
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15) !important;
+  }
+}
+
+.rs__menu {
+  background: #1f1f1f !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.rs__option {
+  &--is-focused {
+    background: rgba(236, 72, 153, 0.1) !important;
+  }
+  
+  &--is-selected {
+    background: #ec4899 !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGINATION
+   ═══════════════════════════════════════════════════════════ */
+.paginator {
+  padding: 20px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  
+  &__page-button {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    
+    &--is-current {
+      background: #ec4899 !important;
+      border-color: #ec4899 !important;
+      color: white !important;
+    }
+    
+    &:hover:not(&--is-current) {
+      border-color: #ec4899 !important;
+      color: #ec4899 !important;
+    }
+  }
 }
