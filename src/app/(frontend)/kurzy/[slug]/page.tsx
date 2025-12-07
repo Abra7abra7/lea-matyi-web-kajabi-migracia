@@ -57,7 +57,7 @@ export default async function CourseDetailPage({ params }: Props) {
   if (!course) notFound()
   
   const user = await getCurrentUser()
-  const hasAccess = userOwnsCourse(user, course.id)
+  const hasAccess = userOwnsCourse(user, String(course.id))
   
   const coverImage = course.coverImage as any
   const imageUrl = coverImage?.url || '/images/course-placeholder.jpg'

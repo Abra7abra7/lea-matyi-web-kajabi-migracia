@@ -7,7 +7,7 @@ export default function HomePage() {
   // Schema.org pre SEO
   const organizationSchema = generateOrganizationSchema()
   const webPageSchema = generateWebPageSchema({
-    title: siteConfig.seo.title,
+    title: siteConfig.seo.defaultTitle,
     description: siteConfig.seo.description,
     url: siteConfig.url,
   })

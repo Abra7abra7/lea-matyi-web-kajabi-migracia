@@ -45,7 +45,7 @@ export default async function LessonPage({ params }: Props) {
   if (!course) notFound()
   
   const user = await getCurrentUser()
-  const hasAccess = userOwnsCourse(user, course.id)
+  const hasAccess = userOwnsCourse(user, String(course.id))
   
   const modules = (course.modules as any[]) || []
   const currentModule = modules[moduleIndex]

@@ -58,8 +58,8 @@ export async function POST(request: Request) {
     
     const session = await createCheckoutSession({
       priceId: course.stripePriceId,
-      courseId: course.id,
-      userId: user.id,
+      courseId: String(course.id),
+      userId: String(user.id),
       userEmail: user.email,
       successUrl: `${baseUrl}/kurzy/${courseSlug}?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${baseUrl}/kurzy/${courseSlug}?canceled=true`,

@@ -5,7 +5,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 // Collections
-import { Users, Media, Courses, Orders } from './collections'
+import { Users } from '@/collections/Users'
+import { Media } from '@/collections/Media'
+import { Courses } from '@/collections/Courses'
+import { Orders } from '@/collections/Orders'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

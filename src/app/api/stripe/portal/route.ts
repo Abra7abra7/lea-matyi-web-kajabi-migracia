@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const stripeCustomerId = user.stripeCustomerId as string
+    const stripeCustomerId = (user as any).stripeCustomerId as string
     
     if (!stripeCustomerId) {
       return NextResponse.json(
