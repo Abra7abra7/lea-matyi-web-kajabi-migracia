@@ -1,19 +1,19 @@
 /* ═══════════════════════════════════════════════════════════
-   BEAUTY ACADEMY - PAYLOAD ADMIN CUSTOM THEME
-   Tmavá téma s pink akcentom
+   BEAUTY ACADEMY - PAYLOAD ADMIN COMPACT THEME
+   Kompaktná navigácia + opravené prekrývanie
    ═══════════════════════════════════════════════════════════ */
 
-/* Force dark theme premenné priamo */
+/* Force dark theme */
 :root,
 html,
 html[data-theme='light'],
 html[data-theme='dark'] {
-  /* Tmavá téma - invertované pre Payload */
+  /* Tmavá téma */
   --theme-bg: #111111 !important;
   --theme-text: #f5f5f5 !important;
   --theme-input-bg: #1a1a1a !important;
   
-  /* Elevation scale - tmavé pozadia */
+  /* Elevation scale */
   --theme-elevation-0: #111111 !important;
   --theme-elevation-50: #161616 !important;
   --theme-elevation-100: #1c1c1c !important;
@@ -40,349 +40,691 @@ html[data-theme='dark'] {
   --theme-success-500: #ec4899 !important;
   --theme-success-550: #db2777 !important;
   
-  /* Navigácia - kompaktnejšia */
-  --nav-width: 220px !important;
+  /* KOMPAKTNÁ NAVIGÁCIA */
+  --nav-width: 200px !important;
   
-  /* Zaoblenie - modernejšie */
-  --style-radius-s: 6px !important;
-  --style-radius-m: 8px !important;
-  --style-radius-l: 12px !important;
+  /* Menší baseline pre kompaktnejšie rozloženie */
+  --base: 1.2rem !important;
   
   color-scheme: dark !important;
 }
 
-/* Force background na body a html */
 html, body {
   background: #111111 !important;
   color: #f5f5f5 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SIDEBAR NAVIGÁCIA - Oprava šírky pre mobile
+   NAVIGÁCIA - KOMPAKTNÁ
    ═══════════════════════════════════════════════════════════ */
 
-@media (max-width: 768px) {
-  :root,
-  html,
-  html[data-theme='light'],
-  html[data-theme='dark'] {
-    --nav-width: 280px !important;
-  }
+/* Sidebar - užší */
+aside,
+[class*="nav-wrapper"],
+[class*="template-default__nav"] {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  background: #0d0d0d !important;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   DASHBOARD - MAX WIDTH PRE PREHĽADNOSŤ
-   ═══════════════════════════════════════════════════════════ */
-
-/* Dashboard wrapper */
-[class*="dashboard"] {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 2rem;
-}
-
-/* Dashboard karty - grid layout */
-[class*="dashboard"] ul {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-  gap: 1.5rem !important;
-  list-style: none !important;
+/* Nav skupiny - kompaktnejšie */
+nav [class*="group"] {
+  margin-bottom: 0.25rem !important;
   padding: 0 !important;
 }
 
-[class*="dashboard"] li {
+/* Nav group labels - menšie */
+nav [class*="label"],
+[class*="nav__label"],
+[class*="group-label"] {
+  font-size: 10px !important;
+  padding: 0.5rem 0.75rem 0.25rem !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #666 !important;
+}
+
+/* Nav links - kompaktné */
+nav a,
+nav button,
+[class*="nav__link"],
+[class*="nav-group"] > a,
+[class*="nav-group"] > button {
+  padding: 0.4rem 0.75rem !important;
+  font-size: 12px !important;
+  margin: 1px 0.5rem !important;
+  border-radius: 4px !important;
+  line-height: 1.3 !important;
+}
+
+nav a:hover,
+nav button:hover {
   background: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
-  border-radius: 12px !important;
-  padding: 1.5rem !important;
-  transition: all 0.2s ease !important;
 }
 
-[class*="dashboard"] li:hover {
-  border-color: #ec4899 !important;
-  transform: translateY(-2px) !important;
+/* Nested nav items - ešte kompaktnejšie */
+nav [class*="children"] a,
+nav [class*="items"] a {
+  padding: 0.3rem 0.75rem 0.3rem 1.5rem !important;
+  font-size: 11px !important;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   COLLECTION LIST - CENTROVANIE
-   ═══════════════════════════════════════════════════════════ */
-
-[class*="collection-list"],
-[class*="list-controls"],
-[class*="list-header"] {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+/* Nav icons - menšie */
+nav svg,
+nav [class*="icon"] {
+  width: 14px !important;
+  height: 14px !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DOCUMENT EDIT - KOMPAKTNÝ
+   HLAVNÝ OBSAH - PREHĽADNÝ
    ═══════════════════════════════════════════════════════════ */
 
-[class*="document-fields"],
-[class*="doc-controls"] {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+/* Main content wrapper */
+[class*="template-default__wrap"],
+[class*="main-content"] {
+  padding: 1rem 1.5rem !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+/* Header s titulkom stránky */
+[class*="list-header"],
+[class*="doc-header"],
+header [class*="gutter"] {
+  padding: 0.75rem 0 !important;
+  margin-bottom: 1rem !important;
+  border-bottom: 1px solid #232323 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important;
+}
+
+/* Titulky stránok - menšie */
+h1, [class*="doc-header"] h1 {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  color: #fff !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   LOGIN STRÁNKA
+   TLAČIDLÁ - VIDITEĽNÉ A PREHĽADNÉ
    ═══════════════════════════════════════════════════════════ */
 
-[class*="login"] {
-  background: linear-gradient(145deg, #111111 0%, #1a1a2e 50%, #111111 100%) !important;
+/* Všetky tlačidlá - základné štýly */
+button,
+[class*="btn"],
+a[class*="btn"] {
+  padding: 0.5rem 1rem !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  white-space: nowrap !important;
 }
 
-[class*="login"] form {
-  max-width: 380px;
-  margin: 0 auto;
-  background: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
-  border-radius: 12px !important;
-  padding: 2rem !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BUTTONS - PINK GRADIENT
-   ═══════════════════════════════════════════════════════════ */
-
-button[class*="btn--style-primary"],
-a[class*="btn--style-primary"],
-[class*="btn"][class*="primary"] {
+/* Primary buttons - pink gradient */
+[class*="btn--style-primary"],
+[class*="btn"][class*="primary"],
+button[type="submit"] {
   background: linear-gradient(135deg, #ec4899, #db2777) !important;
   border: none !important;
-  border-radius: 8px !important;
   color: white !important;
+  padding: 0.6rem 1.25rem !important;
 }
 
-button[class*="btn--style-primary"]:hover,
-a[class*="btn--style-primary"]:hover,
-[class*="btn"][class*="primary"]:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3);
+[class*="btn--style-primary"]:hover,
+[class*="btn"][class*="primary"]:hover,
+button[type="submit"]:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3) !important;
+}
+
+/* Secondary buttons */
+[class*="btn--style-secondary"],
+[class*="btn"][class*="secondary"] {
+  background: #232323 !important;
+  border: 1px solid #3a3a3a !important;
+  color: #e6e6e6 !important;
+}
+
+[class*="btn--style-secondary"]:hover {
+  background: #2a2a2a !important;
+  border-color: #4a4a4a !important;
+}
+
+/* Create new button - výrazný */
+a[href*="create"],
+[class*="create"] {
+  background: linear-gradient(135deg, #ec4899, #db2777) !important;
+  color: white !important;
+  border: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   INPUTS - LEPŠÍ KONTRAST
+   TABUĽKY - PREHĽADNÉ
    ═══════════════════════════════════════════════════════════ */
 
-input,
+/* Table wrapper */
+[class*="table"],
+table {
+  width: 100% !important;
+  background: #161616 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid #232323 !important;
+}
+
+/* Table header */
+thead,
+[class*="table-header"],
+th {
+  background: #1c1c1c !important;
+}
+
+th {
+  padding: 0.75rem 1rem !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #808080 !important;
+  text-align: left !important;
+  border-bottom: 1px solid #2a2a2a !important;
+  white-space: nowrap !important;
+}
+
+/* Table rows */
+td {
+  padding: 0.75rem 1rem !important;
+  font-size: 13px !important;
+  color: #e6e6e6 !important;
+  border-bottom: 1px solid #1e1e1e !important;
+  vertical-align: middle !important;
+}
+
+tr:hover td {
+  background: #1a1a1a !important;
+}
+
+/* Table cell links */
+td a {
+  color: #ec4899 !important;
+  text-decoration: none !important;
+}
+
+td a:hover {
+  text-decoration: underline !important;
+}
+
+/* Sort buttons v hlavičke */
+th button {
+  padding: 0.25rem !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Checkbox cells - kompaktné */
+td:first-child,
+th:first-child {
+  width: 40px !important;
+  text-align: center !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORMULÁRE - BEZ PREKRÝVANIA
+   ═══════════════════════════════════════════════════════════ */
+
+/* Form fields wrapper */
+[class*="render-fields"],
+[class*="document-fields"] {
+  max-width: 800px !important;
+  margin: 0 auto !important;
+}
+
+/* Jednotlivé polia - jasné oddelenie */
+[class*="field-type"],
+[class*="field"] {
+  margin-bottom: 1.25rem !important;
+  position: relative !important;
+}
+
+/* Labels - jasne viditeľné */
+label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #b4b4b4 !important;
+  margin-bottom: 0.5rem !important;
+  text-transform: none !important;
+}
+
+/* Required indicator */
+label [class*="required"] {
+  color: #ec4899 !important;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
 textarea,
 select {
+  width: 100% !important;
+  padding: 0.65rem 0.875rem !important;
+  font-size: 13px !important;
   background: #1a1a1a !important;
   border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
   color: #f5f5f5 !important;
+  transition: all 0.15s ease !important;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
   border-color: #ec4899 !important;
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15) !important;
   outline: none !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15) !important;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #666666 !important;
+  color: #555 !important;
+}
+
+/* Field descriptions */
+[class*="field-description"],
+[class*="description"] {
+  font-size: 11px !important;
+  color: #666 !important;
+  margin-top: 0.375rem !important;
+}
+
+/* Error messages */
+[class*="error"],
+[class*="field-error"] {
+  color: #ef4444 !important;
+  font-size: 11px !important;
+  margin-top: 0.375rem !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   HEADINGS V DASHBOARD
+   ROW FIELDS - VEDĽA SEBA
    ═══════════════════════════════════════════════════════════ */
 
-[class*="dashboard"] h2,
-[class*="dashboard"] h3,
-[class*="dashboard"] h4 {
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
-  color: #808080 !important;
+[class*="field-type--row"],
+[class*="row-field"],
+[class*="render-fields"] > [class*="row"] {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 1rem !important;
+  align-items: start !important;
+}
+
+[class*="field-type--row"] > [class*="field"],
+[class*="row-field"] > [class*="field"] {
+  margin-bottom: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH & FILTERS - KOMPAKTNÉ
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="search-filter"],
+[class*="list-controls"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
   margin-bottom: 1rem !important;
+  flex-wrap: wrap !important;
+}
+
+[class*="search-filter"] input {
+  max-width: 300px !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TABUĽKY - LEPŠIE ČÍTANIE
+   PAGINATION - KOMPAKTNÁ
    ═══════════════════════════════════════════════════════════ */
 
-table {
-  background: #1a1a1a !important;
+[class*="paginator"],
+[class*="pagination"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0.75rem 0 !important;
+  margin-top: 1rem !important;
+  border-top: 1px solid #232323 !important;
+  font-size: 12px !important;
+}
+
+[class*="paginator"] button {
+  padding: 0.375rem 0.75rem !important;
+  font-size: 12px !important;
+  min-width: auto !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABS - PRE ORGANIZÁCIU POLÍ
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="tabs"] {
+  margin-bottom: 1.5rem !important;
+}
+
+[class*="tabs"] [class*="tab-list"],
+[class*="tabs-field__tabs"] {
+  display: flex !important;
+  gap: 0 !important;
+  border-bottom: 1px solid #2a2a2a !important;
+  margin-bottom: 1.5rem !important;
+}
+
+[class*="tabs"] button,
+[class*="tab-button"] {
+  padding: 0.625rem 1rem !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #808080 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  cursor: pointer !important;
+}
+
+[class*="tabs"] button:hover,
+[class*="tab-button"]:hover {
+  color: #e6e6e6 !important;
+}
+
+[class*="tabs"] button[class*="active"],
+[class*="tab-button--active"] {
+  color: #ec4899 !important;
+  border-bottom-color: #ec4899 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ARRAY FIELDS - MODULY A LEKCIE
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="array-field"] {
+  border: 1px solid #232323 !important;
   border-radius: 8px !important;
   overflow: hidden !important;
 }
 
-th {
-  background: #232323 !important;
-  font-size: 0.7rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  color: #808080 !important;
-}
-
-td {
-  border-bottom: 1px solid #232323 !important;
-  color: #e6e6e6 !important;
-}
-
-tr:hover td {
-  background: #1e1e1e !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   LINKS
-   ═══════════════════════════════════════════════════════════ */
-
-a {
-  color: #ec4899 !important;
-}
-
-a:hover {
-  color: #db2777 !important;
-}
-
-/* Nav links exception - white */
-nav a,
-[class*="nav"] a {
-  color: #c8c8c8 !important;
-}
-
-nav a:hover,
-[class*="nav"] a:hover {
-  color: #ffffff !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CUSTOM DASHBOARD STATS KOMPONENTY
-   ═══════════════════════════════════════════════════════════ */
-
-.dashboard-stats-card {
+[class*="array-field__header"],
+[class*="array-field"] > header {
   background: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
-  border-radius: 12px !important;
-  padding: 1.5rem !important;
+  padding: 0.75rem 1rem !important;
+  border-bottom: 1px solid #232323 !important;
 }
 
-.dashboard-stats-card__value {
-  color: #ec4899 !important;
-  font-size: 2rem !important;
-  font-weight: 700 !important;
+[class*="array-field__row"] {
+  border-bottom: 1px solid #1e1e1e !important;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SCROLLBAR - ELEGANTNÁ
-   ═══════════════════════════════════════════════════════════ */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+[class*="array-field__row"]:last-child {
+  border-bottom: none !important;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+[class*="array-field__row-header"] {
+  padding: 0.625rem 1rem !important;
+  background: #161616 !important;
+  cursor: pointer !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #3a3a3a;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #4e4e4e;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   HEADER / APP BAR
-   ═══════════════════════════════════════════════════════════ */
-
-header,
-[class*="header"],
-[class*="app-header"] {
+[class*="array-field__row-content"] {
+  padding: 1rem !important;
   background: #111111 !important;
-  border-bottom: 1px solid #232323 !important;
+}
+
+/* Add row button */
+[class*="array-field__add"],
+[class*="add-row"] {
+  margin: 0.75rem !important;
+  padding: 0.625rem 1rem !important;
+  background: transparent !important;
+  border: 2px dashed #2a2a2a !important;
+  border-radius: 6px !important;
+  color: #666 !important;
+  font-size: 12px !important;
+  width: calc(100% - 1.5rem) !important;
+}
+
+[class*="array-field__add"]:hover,
+[class*="add-row"]:hover {
+  border-color: #ec4899 !important;
+  color: #ec4899 !important;
+  background: rgba(236, 72, 153, 0.05) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SIDEBAR / NAV
+   SELECT / DROPDOWN
    ═══════════════════════════════════════════════════════════ */
 
-aside,
-nav,
-[class*="nav-wrapper"],
-[class*="sidebar"] {
-  background: #0d0d0d !important;
-  border-right: 1px solid #1c1c1c !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CARDS / PANELS
-   ═══════════════════════════════════════════════════════════ */
-
-[class*="card"],
-[class*="panel"] {
+[class*="rs__control"],
+[class*="react-select"] {
   background: #1a1a1a !important;
   border: 1px solid #2a2a2a !important;
-  border-radius: 12px !important;
+  border-radius: 6px !important;
+  min-height: 38px !important;
 }
 
-[class*="card"]:hover,
-[class*="panel"]:hover {
+[class*="rs__control"]:hover {
   border-color: #3a3a3a !important;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   MODALS / DRAWERS
-   ═══════════════════════════════════════════════════════════ */
-
-[class*="modal"],
-[class*="drawer"] {
-  background: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
-}
-
-/* Overlay */
-[class*="overlay"],
-[class*="backdrop"] {
-  background: rgba(0, 0, 0, 0.8) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   PILLS / BADGES
-   ═══════════════════════════════════════════════════════════ */
-
-[class*="pill"],
-[class*="badge"] {
-  background: #232323 !important;
-  border-radius: 20px !important;
-}
-
-[class*="pill--success"],
-[class*="badge--success"] {
-  background: rgba(236, 72, 153, 0.15) !important;
-  color: #ec4899 !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SELECT / DROPDOWN - React Select
-   ═══════════════════════════════════════════════════════════ */
-
-[class*="rs__control"] {
-  background: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
+[class*="rs__control--is-focused"] {
+  border-color: #ec4899 !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15) !important;
 }
 
 [class*="rs__menu"] {
   background: #1a1a1a !important;
   border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
+  z-index: 100 !important;
 }
 
-[class*="rs__option"]:hover {
+[class*="rs__option"] {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 13px !important;
+}
+
+[class*="rs__option"]:hover,
+[class*="rs__option--is-focused"] {
   background: #232323 !important;
 }
 
 [class*="rs__option--is-selected"] {
   background: #ec4899 !important;
+  color: white !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UPLOAD FIELD
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="upload__dropzone"] {
+  padding: 1.5rem !important;
+  border: 2px dashed #2a2a2a !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  background: #161616 !important;
+}
+
+[class*="upload__dropzone"]:hover {
+  border-color: #ec4899 !important;
+  background: rgba(236, 72, 153, 0.02) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTION BAR / DOC CONTROLS
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="doc-controls"],
+[class*="action-bar"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.75rem 1rem !important;
+  background: #161616 !important;
+  border: 1px solid #232323 !important;
+  border-radius: 8px !important;
+  margin-bottom: 1.5rem !important;
+  flex-wrap: wrap !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODALS
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="modal__content"],
+[class*="drawer__content"] {
+  background: #1a1a1a !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 12px !important;
+  max-width: 500px !important;
+  padding: 1.5rem !important;
+}
+
+[class*="modal__header"],
+[class*="drawer__header"] {
+  padding-bottom: 1rem !important;
+  margin-bottom: 1rem !important;
+  border-bottom: 1px solid #232323 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD CARDS
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="dashboard"] {
+  padding: 1rem !important;
+}
+
+[class*="dashboard"] ul {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 1rem !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+[class*="dashboard"] li {
+  background: #1a1a1a !important;
+  border: 1px solid #232323 !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+}
+
+[class*="dashboard"] li:hover {
+  border-color: #3a3a3a !important;
+}
+
+[class*="dashboard"] h2,
+[class*="dashboard"] h3,
+[class*="dashboard"] h4 {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #666 !important;
+  margin: 0 0 0.75rem 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a !important;
+  border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MISC OVERRIDES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Links */
+a {
+  color: #ec4899 !important;
+}
+
+a:hover {
+  color: #f472b6 !important;
+}
+
+/* Nav links - white */
+nav a, aside a {
+  color: #c8c8c8 !important;
+}
+
+nav a:hover, aside a:hover {
+  color: #fff !important;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+}
+
+/* Hide long breadcrumbs overflow */
+[class*="breadcrumb"] {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 300px !important;
+}
+
+/* Pill badges */
+[class*="pill"],
+[class*="badge"] {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 10px !important;
+  border-radius: 4px !important;
+  background: #232323 !important;
+}
+
+/* Status pills */
+[class*="pill--success"] {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+}
+
+[class*="pill--warning"] {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+}
+
+[class*="pill--error"] {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
 }
