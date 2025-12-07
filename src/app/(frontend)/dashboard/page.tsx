@@ -4,6 +4,9 @@ import { getCurrentUser } from '@/lib/auth'
 import { siteConfig } from '@/config'
 import { BookOpen, PlayCircle, Award, Settings, ChevronRight } from 'lucide-react'
 
+// Force dynamic - používa cookies
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Dashboard',
 }

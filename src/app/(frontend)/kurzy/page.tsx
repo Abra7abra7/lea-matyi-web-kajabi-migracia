@@ -5,6 +5,9 @@ import { formatPrice, formatDuration } from '@/lib/utils'
 import { siteConfig, themeConfig } from '@/config'
 import { Clock, BookOpen, Star, ChevronRight } from 'lucide-react'
 
+// Force dynamic rendering (databáza nie je dostupná počas buildu na Vercel)
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Kurzy',
   description: 'Profesionálne online kurzy v oblasti beauty. Objavte naše kurzy a začnite sa učiť už dnes.',

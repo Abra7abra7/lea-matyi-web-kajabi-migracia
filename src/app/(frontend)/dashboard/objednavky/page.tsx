@@ -5,6 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ShoppingBag, Calendar, CreditCard } from 'lucide-react'
 
+// Force dynamic - používa cookies
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Moje objednávky',
 }
