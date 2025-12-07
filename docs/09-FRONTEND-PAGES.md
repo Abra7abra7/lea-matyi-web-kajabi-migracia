@@ -809,3 +809,4 @@ export default function FrontendLayout({
 
 *Frontend postavený na Next.js 15 App Router so shadcn/ui komponentmi.*
 
+

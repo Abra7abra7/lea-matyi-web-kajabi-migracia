@@ -525,3 +525,4 @@ npx cap open android
 
 *Capacitor pre jednoduchú konverziu webovej aplikácie na natívnu.*
 
+

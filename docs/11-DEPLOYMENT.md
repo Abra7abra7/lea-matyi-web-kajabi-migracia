@@ -401,3 +401,4 @@ const nextConfig: NextConfig = {
 
 *Deployment na Vercel s Neon PostgreSQL pre optimálny výkon.*
 
+

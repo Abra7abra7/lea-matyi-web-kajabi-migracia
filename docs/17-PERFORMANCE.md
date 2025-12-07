@@ -560,3 +560,4 @@ https://pagespeed.web.dev/
 
 *Performance je feature. Rýchla stránka = lepšie konverzie.*
 
+

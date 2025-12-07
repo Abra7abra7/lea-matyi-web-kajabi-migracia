@@ -644,3 +644,4 @@ https://cards-dev.twitter.com/validator
 
 *Optimalizácia pre AI vyhľadávače zabezpečí lepšiu viditeľnosť v Perplexity, ChatGPT a ďalších.*
 
+

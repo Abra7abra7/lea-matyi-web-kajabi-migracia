@@ -855,3 +855,4 @@ colors: {
 
 *Konfigurovateľný dizajn systém pre jednoduché prispôsobenie a duplikovanie.*
 
+

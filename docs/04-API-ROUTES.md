@@ -634,3 +634,4 @@ return NextResponse.json({
 
 *API routes využívajú Next.js Route Handlers s Payload Local API.*
 
+

@@ -358,3 +358,4 @@ vercel logs --follow
 
 *Bezpečné spravovanie environment variables pre vývoj a produkciu.*
 
+

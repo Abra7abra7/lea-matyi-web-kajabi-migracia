@@ -641,3 +641,4 @@ Courses
 
 *Schémy sú optimalizované pre Payload CMS 3.0 s PostgreSQL.*
 
+

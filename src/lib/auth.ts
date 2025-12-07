@@ -176,3 +176,4 @@ export function userOwnsCourse(user: User | null, courseId: string): boolean {
   return user.purchasedCourses?.some(course => course.id === courseId) ?? false
 }
 
+

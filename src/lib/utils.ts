@@ -61,3 +61,4 @@ export function formatDuration(minutes: number): string {
   return `${hours}h ${mins}min`
 }
 
+

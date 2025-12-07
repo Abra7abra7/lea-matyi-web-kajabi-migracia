@@ -480,3 +480,4 @@ async function migrateBatch(startIndex: number, batchSize: number) {
 
 *Migračný skript pre bezproblémový prechod z Kajabi na novú platformu.*
 
+

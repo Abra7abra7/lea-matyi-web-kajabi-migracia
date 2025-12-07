@@ -730,3 +730,4 @@ export const hasPurchasedCourse = (courseId: string): Access => {
 
 *Payload CMS Auth pre bezpečnú autentifikáciu a autorizáciu.*
 
+

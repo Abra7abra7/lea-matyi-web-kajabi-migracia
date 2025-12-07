@@ -113,3 +113,4 @@ export function getStreamThumbnailUrl(videoId: string, time: number = 0): string
   return `https://customer-${accountId}.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=${time}s`
 }
 
+

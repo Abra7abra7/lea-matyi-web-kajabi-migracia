@@ -258,3 +258,4 @@ export default withPayload(nextConfig)
 
 *Verzie aktualizované: December 2024*
 
+

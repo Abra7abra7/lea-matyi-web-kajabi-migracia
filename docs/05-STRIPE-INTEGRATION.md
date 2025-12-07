@@ -425,3 +425,4 @@ Dashboard → Settings → Alerts:
 
 *Stripe integrácia pre jednorazové platby s automatickými faktúrami.*
 
+
