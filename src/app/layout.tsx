@@ -9,26 +9,14 @@ export const metadata: Metadata = {
   },
   description: siteConfig.seo.description,
   metadataBase: new URL(siteConfig.url),
-  openGraph: {
-    title: siteConfig.seo.defaultTitle,
-    description: siteConfig.seo.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    locale: siteConfig.seo.locale,
-    type: 'website',
-  },
 }
 
-// Root layout - required by Next.js 15
-// Each route group overrides this with their own html/body
+// Root layout - passthrough for route groups
+// Each route group defines its own html/body
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="sk">
-      <body>{children}</body>
-    </html>
-  )
+  return children
 }
