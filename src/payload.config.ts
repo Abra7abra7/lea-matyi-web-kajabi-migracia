@@ -11,41 +11,82 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  // ═══════════════════════════════════════════════════════════
+  // ADMIN KONFIGURÁCIA
+  // ═══════════════════════════════════════════════════════════
   admin: {
     user: 'users',
+    
     meta: {
       titleSuffix: ' | Beauty Academy Admin',
     },
+    
+    // Custom komponenty
     components: {
-      // Môžeme pridať vlastné komponenty
+      // Logo v navigácii
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+      
+      // Before login - branding
+      beforeLogin: [
+        '@/components/admin/BeforeLogin',
+      ],
+      
+      // After dashboard - stats
+      afterDashboard: [
+        '@/components/admin/DashboardStats',
+      ],
     },
+    
+    // Dátumový formát
+    dateFormat: 'dd.MM.yyyy HH:mm',
   },
   
+  // ═══════════════════════════════════════════════════════════
+  // COLLECTIONS
+  // ═══════════════════════════════════════════════════════════
   collections: [Users, Media, Courses, Orders],
   
+  // ═══════════════════════════════════════════════════════════
+  // EDITOR
+  // ═══════════════════════════════════════════════════════════
   editor: lexicalEditor(),
   
+  // ═══════════════════════════════════════════════════════════
+  // BEZPEČNOSŤ
+  // ═══════════════════════════════════════════════════════════
   secret: process.env.PAYLOAD_SECRET || 'DEVELOPMENT_SECRET_CHANGE_ME',
   
+  // ═══════════════════════════════════════════════════════════
+  // TYPESCRIPT
+  // ═══════════════════════════════════════════════════════════
   typescript: {
     outputFile: path.resolve(dirname, 'types/payload-types.ts'),
   },
   
-  // SQLite pre lokálny vývoj
+  // ═══════════════════════════════════════════════════════════
+  // DATABÁZA - SQLite pre lokálny vývoj
+  // ═══════════════════════════════════════════════════════════
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URL || 'file:./database.db',
     },
   }),
   
-  // Upload directory
+  // ═══════════════════════════════════════════════════════════
+  // UPLOAD
+  // ═══════════════════════════════════════════════════════════
   upload: {
     limits: {
       fileSize: 50000000, // 50MB
     },
   },
   
+  // ═══════════════════════════════════════════════════════════
   // CORS
+  // ═══════════════════════════════════════════════════════════
   cors: [
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   ],
